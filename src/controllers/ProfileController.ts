@@ -9,7 +9,6 @@ export default {
 
   async update(req: Request, res: Response) {
     const data = req.body;
-    console.log(data);
     const weeksPerYear = 52;
     const weeksPerMonth = (weeksPerYear - data['vacation-per-year']) / 12;
 
@@ -21,6 +20,7 @@ export default {
       data['monthly-budget'] / monthlyTotalHours);
 
     const profile = await Profile.get();
+    console.log(profile);
 
     await Profile.update({
       ...profile,

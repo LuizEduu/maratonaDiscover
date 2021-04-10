@@ -33,9 +33,12 @@ export default {
 
     const budget = jobUtils.calculateBudget(job, profile.value_hour);
 
-    Object.assign(job, budget);
+    const jobEdit = {
+      ...job,
+      budget,
+    };
 
-    return res.render('job-edit', { job });
+    return res.render('job-edit', { job: jobEdit });
   },
 
   async update(req: Request, res: Response) {
