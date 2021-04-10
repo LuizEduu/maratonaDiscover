@@ -21,7 +21,6 @@ export default {
       data['monthly-budget'] / monthlyTotalHours);
 
     const profile = await Profile.get();
-    console.log(profile);
 
     await Profile.update({
       ...profile,

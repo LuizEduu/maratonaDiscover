@@ -24,16 +24,16 @@ export default {
 
     const trx = await knex.transaction();
 
-    const saveProfile = {
+    await trx('profile').update({
       name: clearSpacesName,
       avatar: profile.avatar,
       monthly_budget: profile['monthly-budget'],
       hours_per_day: profile['hours-per-day'],
       days_per_week: profile['days-per-week'],
       vacation_per_year: profile['vacation-per-year'],
-      value_hour: profile.value_hou,
-    };
+      value_hour: profile.value_hour,
+    });
 
-    await trx('profile').update({ saveProfile });
+    trx.commit();
   },
 };

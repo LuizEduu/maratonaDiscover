@@ -9,8 +9,6 @@ export default {
     const jobs = await Job.get();
     const profile = await Profile.get();
 
-    console.log(profile);
-
     let statusCount = {
       progress: 0,
       done: 0,

@@ -17,7 +17,7 @@ export default {
 
     // transformar milli em dias
     const dayInMilliseconds = 1000 * 60 * 60 * 24; // converte milliseconds para um dia
-    const dayDiff = Math.floor(timeDiffInMilliseconds / dayInMilliseconds);
+    const dayDiff = Math.floor(timeDiffInMilliseconds / dayInMilliseconds); //math.ceil ficou dando bug nos status para mim, floor funcionou
 
     // restam x dias
     return dayDiff;
