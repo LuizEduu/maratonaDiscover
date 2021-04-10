@@ -1,24 +1,25 @@
-const Job = require('../model/Job');
-const Profile = require('../model/Profile');
-const jobUtils = require('../utils/JobUtils');
+import { Request, Response } from 'express';
+import Job from '../model/Job';
+import Profile from '../model/Profile';
+import jobUtils from '../utils/JobUtils';
 
-module.exports = {
-  create(req, res) {
+export default {
+  create(req: Request, res: Response) {
     return res.render('job');
   },
 
-  async save(req, res) {
+  async save(req: Request, res: Response) {
     await Job.create({
       name: req.body.name,
-      'daily-hours': req.body['daily-hours'],
-      'total-hours': req.body['total-hours'],
+      daily_hours: req.body['daily-hours'],
+      total_hours: req.body['total-hours'],
       created_at: Date.now(),
     });
 
     return res.redirect('/');
   },
 
-  async show(req, res) {
+  async show(req: Request, res: Response) {
     const jobs = await Job.get();
     const jobId = req.params.id;
 
@@ -28,17 +29,17 @@ module.exports = {
       return res.send('Job not found!');
     }
 
-    const profile = await Profile.get()
+    const profile = await Profile.get();
 
-    job.budget = jobUtils.calculateBudget(job, profile['value-hour']);
+    const budget = jobUtils.calculateBudget(job, profile.value_hour);
+
+    Object.assign(job, budget);
 
     return res.render('job-edit', { job });
   },
 
-  async update(req, res) {
+  async update(req: Request, res: Response) {
     const jobId = req.params.id;
-    let job = await Job.get();
-
 
     if (!jobId) {
       return res.send('Job not found!');
@@ -54,24 +55,23 @@ module.exports = {
 
     const updatedJob = {
       name: req.body.name,
-      "total-hours": req.body["total-hours"],
-      "daily-hours": req.body["daily-hours"]
-    }
+      total_hours: req.body['total-hours'],
+      daily_hours: req.body['daily-hours'],
+    };
 
-
-    await Job.update(updatedJob, jobId)
+    await Job.update(updatedJob, Number(jobId));
 
     return res.redirect('/');
   },
 
-  async delete(req, res) {
+  async delete(req: Request, res: Response) {
     const jobId = req.params.id;
 
     if (!jobId) {
       return res.send('Job not found');
     }
 
-    await Job.delete(jobId);
+    await Job.delete(Number(jobId));
 
     return res.redirect('/');
   },

@@ -1,9 +1,11 @@
-const Job = require('../model/Job');
-const Profile = require('../model/Profile');
-const jobUtils = require('../utils/JobUtils');
+import { Request, Response } from 'express';
 
-module.exports = {
-  async index(req, res) {
+import Job from '../model/Job';
+import Profile from '../model/Profile';
+import jobUtils from '../utils/JobUtils';
+
+export default {
+  async index(req: Request, res: Response) {
     const jobs = await Job.get();
     const profile = await Profile.get();
 
@@ -23,19 +25,19 @@ module.exports = {
 
       jobTotalHours =
         status === 'progress'
-          ? (jobTotalHours += Number(job['daily-hours']))
+          ? (jobTotalHours += Number(job.daily_hours))
           : jobTotalHours;
 
       return {
         ...job, // pegando tudo que tem no job e colocando pra esse objeto novo
         remaining,
         status,
-        budget: jobUtils.calculateBudget(job, profile['value-hour']),
+        budget: jobUtils.calculateBudget(job, profile.value_hour),
       };
     });
 
     // qtd de horas que quero trabalhar - qtd de horas/dia de cada job em progress
-    freeHours = profile['hours-per-day'] - jobTotalHours;
+    const freeHours = profile.hours_per_day - jobTotalHours;
 
     return res.render('index', {
       statusCount,

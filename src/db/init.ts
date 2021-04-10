@@ -1,4 +1,4 @@
-const Database = require('./config');
+import Database from './config';
 
 const initDb = {
   async init() {

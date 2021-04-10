@@ -1,13 +1,13 @@
-const Database = require('../db/config');
-const Profile = require('../model/Profile');
+import { Request, Response } from 'express';
+import Profile from '../model/Profile';
 
-module.exports = {
-  async index(req, res) {
+export default {
+  async index(req: Request, res: Response) {
     const profile = await Profile.get();
     return res.render('profile', { profile });
   },
 
-  async update(req, res) {
+  async update(req: Request, res: Response) {
     const data = req.body;
     const weeksPerYear = 52;
     const weeksPerMonth = (weeksPerYear - data['vacation-per-year']) / 12;
