@@ -1,7 +1,15 @@
 import JobService from '../services/JobService';
 
+interface Job {
+  id: string;
+  name: string;
+  daily_hours: number;
+  total_hours: number;
+  created_at: Date;
+}
+
 export default {
-  async get() {
+  async get(): Promise<Job[] | null> {
     return await JobService.get();
   },
 
@@ -13,7 +21,7 @@ export default {
     await JobService.update(updatedJob, jobId);
   },
 
-  async delete(jobId: number) {
+  async delete(jobId: string) {
     await JobService.delete(jobId);
   },
 };

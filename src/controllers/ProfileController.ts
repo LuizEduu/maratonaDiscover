@@ -4,7 +4,8 @@ import Profile from '../model/Profile';
 export default {
   async index(req: Request, res: Response) {
     const profile = await Profile.get();
-    return res.render('profile', { profile });
+    const serializedProfile = profile[0];
+    return res.render('profile', { profile: serializedProfile });
   },
 
   async update(req: Request, res: Response) {

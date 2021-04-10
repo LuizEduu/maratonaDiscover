@@ -1,4 +1,4 @@
-import Database from '../db/config';
+import knex from '../database/connection';
 
 interface Request {
   id?: string;
@@ -10,11 +10,7 @@ interface Request {
 
 export default {
   async get() {
-    const db = await Database();
-
-    const jobs = await db.all(`SELECT * FROM jobs`);
-
-    db.close();
+    const jobs = await knex('jobs').select('*');
 
     return jobs.map((job) => ({
       id: job.id,
@@ -26,42 +22,35 @@ export default {
   },
 
   async create(job: Request) {
-    const db = await Database();
+    const saveJob = {
+      ...job,
+      created_at: Date.now(),
+    };
 
-    await db.run(`INSERT INTO jobs(
-      name,
-      daily_hours,
-      total_hours,
-      created_at
-    ) VALUES (
-      "${job.name}",
-      ${job.daily_hours},
-      ${job.total_hours},
-      ${job.created_at}
-    )
-    
-  `);
-    await db.close();
+    const trx = await knex.transaction();
+
+    await trx('jobs').insert(saveJob);
+
+    trx.commit();
   },
 
   async update(updatedJob: Request, jobId: number) {
-    const db = await Database();
+    const trx = await knex.transaction();
 
-    db.run(`UPDATE jobs SET 
-      name = "${updatedJob.name}",
-      daily_hours = ${updatedJob.daily_hours},
-      total_hours = ${updatedJob.total_hours}
-      WHERE id = ${jobId}
-    `);
+    await trx('jobs').where('id', '=', jobId).update({
+      name: updatedJob.name,
+      daily_hours: updatedJob.daily_hours,
+      total_hours: updatedJob.total_hours,
+    });
 
-    await db.close();
+    trx.commit();
   },
 
-  async delete(jobId: number) {
-    const db = await Database();
+  async delete(jobId: string) {
+    const trx = await knex.transaction();
 
-    db.run(`DELETE FROM jobs WHERE id = ${jobId}`);
+    await trx('jobs').where('id', '=', jobId).delete();
 
-    await db.close();
+    trx.commit();
   },
 };
