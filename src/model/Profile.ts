@@ -28,16 +28,16 @@ export default {
       value_hour: data.value_hour,
     };
   },
-  async update(profile: Request) {
+  async update(profile: any) {
     const db = await Database();
 
     db.run(`UPDATE profile SET 
     name = "${profile.name}",
     avatar = "${profile.avatar}",
-    monthly_budget = ${profile.monthly_budget},
-    days_per_week = ${profile.days_per_week},
-    hours_per_day = ${profile.hours_per_day},
-    vacation_per_year = ${profile.vacation_per_year},
+    monthly_budget = ${profile['monthly-budget']},
+    hours_per_day = ${profile['hours_per_day']},
+    days_per_week = ${profile['days_per_week']},
+    vacation_per_year = ${profile['vacation_per_year']},
     value_hour = ${profile.value_hour}
     `);
 
