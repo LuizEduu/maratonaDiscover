@@ -16,6 +16,7 @@ export default {
   async get(): Promise<Profile[]> {
     return await ProfileService.get();
   },
+
   async update(profile: any) {
     await ProfileService.update(profile);
   },

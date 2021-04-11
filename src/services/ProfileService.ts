@@ -20,12 +20,12 @@ export default {
   },
 
   async update(profile: any) {
-    const clearSpacesName = profile.name.trim();
+    const nameClearSpaces = profile.name.trim();
 
     const trx = await knex.transaction();
 
     await trx('profile').update({
-      name: clearSpacesName,
+      name: nameClearSpaces,
       avatar: profile.avatar,
       monthly_budget: profile['monthly-budget'],
       hours_per_day: profile['hours-per-day'],
